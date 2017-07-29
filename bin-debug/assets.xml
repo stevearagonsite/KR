@@ -1,0 +1,40 @@
+<assets>
+	<links name="Menu">
+		<asset url="sounds/Intro.mp3" name="SNDintro" />
+		<asset url="sounds/click.mp3" name="SNDclick" />
+		<asset url="images/Menu.png" name="BackgroundMenu" />
+		<asset url="images/Credits.png" name="BackgroundCredits" />
+		<asset url="images/HowToPlay.png" name="BackgroundHowToPlay" />
+		<asset url="images/ButtonStart.png" name="ButtonStart" />
+		<asset url="images/ButtonStartDown.png" name="ButtonStartOVER" />
+		<asset url="images/ButtonCredits.png" name="ButtonCredits" />
+		<asset url="images/ButtonCreditsDown.png" name="ButtonCreditsOVER" />
+		<asset url="images/ButtonHowToPlay.png" name="ButtonHowToPlay" />
+		<asset url="images/ButtonHowToPlayDown.png" name="ButtonHowToPlayOVER" />
+		<asset url="swfs/Assets.swf" name="movieclips" />
+		<asset url="images/MenuLevels.png" name="MenuLevels" />
+	</links>
+	
+	<links name="Level">
+	    <asset url="sounds/hammer earth.mp3" name="SNDattackRed" />
+	    <asset url="sounds/sword.mp3" name="SNDattackBlue" />
+	    <asset url="sounds/HitFloor.mp3" name="SNDhitFloor" />
+	    <asset url="sounds/Jump.mp3" name="SNDjump" />
+	    <asset url="sounds/Shoot.mp3" name="SNDshoot" />
+	    <asset url="sounds/ShootDamage.mp3" name="SNDshootDamage" />
+	    <asset url="sounds/Damage.mp3" name="SNDdamage" />
+	    <asset url="sounds/SoundtrackBlue.mp3" name="SNDsoundtrackBlue" />
+	    <asset url="sounds/SoundtrackRed.mp3" name="SNDsoundtrackRed" />
+	    <asset url="sounds/UnGravityRed.mp3" name="SNDloopRed" />
+	    <asset url="sounds/UnGravityRed.mp3" name="SNDloopBlue" />
+	    <asset url="sounds/Die.mp3" name="SNDdie" />
+	    <asset url="sounds/Win.mp3" name="SNDwin" />
+	    <asset url="sounds/Point.mp3" name="SNDpoint" />
+		<asset url="images/FXfront.png" name="FXfront" />
+		<asset url="images/Background-Blue.png" name="BackgroundBlue" />
+		<asset url="images/Background-Red.png" name="BackgroundRed" />
+		<asset url="images/Plataform1.png" name="Plataform-1" />
+		<asset url="images/Plataform2.png" name="Plataform-2" />
+		<asset url="images/Plataform3.png" name="Plataform-3" />
+	</links>
+</assets>
