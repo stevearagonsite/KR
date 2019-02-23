@@ -27,6 +27,8 @@ package engine
 	import GUI.HUD;
 	import GUI.ScreenMenu;
 	
+	import net.Client;
+	
 
 	public class Locator extends Sprite{
 		
@@ -93,6 +95,8 @@ package engine
 		public static var timerEnd:Timer;
 		public var win:MovieClip;
 		
+		public static var client:Client;
+		
 		public static var audioTrackRed:SoundController;
 		public static var audioTrackBlue:SoundController;
 		public static var audioDamageShoot:SoundController;
@@ -111,7 +115,7 @@ package engine
 			saveManagerPro = new SaveManagerPro();
 			cam = new Camera2D();
 						
-			mainStage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;//here i can scale the elements
+			//mainStage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;//here i can scale the elements
 			mainStage.scaleMode = StageScaleMode.EXACT_FIT;//here scale the elements
 			
 			mainStage.addChild(layer0);
@@ -120,7 +124,16 @@ package engine
 			level.addChild(layer3);
 			
 			stateFullScreen = true;//Default value state;
+			console.RegisterCommand("triqui", EvTriqui, "Online game triqui!!.");
 			mainStage.addEventListener(KeyboardEvent.KEY_UP, EvKeys);
+		}
+		
+		private function EvTriqui():void
+		{
+			console.UnRegisterCommand("triqui");
+			client = new Client("TheProfe" + Math.random());
+			client.connect("127.0.0.1",8087);
+			trace("Play triqui online!!");
 		}
 		
 		public function Game():void{
