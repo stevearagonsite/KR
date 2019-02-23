@@ -132,7 +132,7 @@ package engine
 		{
 			console.UnRegisterCommand("triqui");
 			client = new Client("TheProfe" + Math.random());
-			client.connect("127.0.0.1",8087);
+			client.connect("192.168.0.248",8087);
 			trace("Play triqui online!!");
 		}
 		
