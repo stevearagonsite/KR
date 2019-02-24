@@ -15,19 +15,14 @@ package engine
 	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
-	
 	import Ambient.Camera2D;
 	import Ambient.SoundController;
-	
 	import Characters.Characters;
-	
 	import Elements.Goal;
 	import Elements.PlatformsMove;
-	
 	import GUI.HUD;
-	import GUI.ScreenMenu;
-	
 	import net.Client;
+	import triqui.NetworkTriqui;
 	
 
 	public class Locator extends Sprite{
@@ -39,7 +34,6 @@ package engine
 		public static var screenManager:ScreenManager;
 		public static var saveManagerPro:SaveManagerPro;
 		
-		public var menu:ScreenMenu;
 		private var stateFullScreen:Boolean;
 		private var isPause:Boolean = false;
 		private var TimeRun:Boolean = true;
@@ -103,6 +97,7 @@ package engine
 		public static var audioDamage:SoundController;
 		public static var audioWin:SoundController;
 		public static var audioPoint:SoundController;
+		public static var networkTriqui: NetworkTriqui;
 		
 		public function Locator(){
 			instance = this;
@@ -124,16 +119,9 @@ package engine
 			level.addChild(layer3);
 			
 			stateFullScreen = true;//Default value state;
-			console.RegisterCommand("triqui", EvTriqui, "Online game triqui!!.");
+
 			mainStage.addEventListener(KeyboardEvent.KEY_UP, EvKeys);
-		}
-		
-		private function EvTriqui():void
-		{
-			console.UnRegisterCommand("triqui");
-			client = new Client("TheProfe" + Math.random());
-			client.connect("192.168.0.248",8087);
-			Locator.screenManager.LoadScreen("TriquiWaiting");
+			networkTriqui = new NetworkTriqui();
 		}
 		
 		public function Game():void{

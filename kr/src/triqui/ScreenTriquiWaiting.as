@@ -4,17 +4,17 @@ package triqui
 	
 	import engine.Locator;
 	import engine.Screen;
-	import net.Client;
 
 	public class ScreenTriquiWaiting extends Screen
 	{
 		public var screenWaitingConnection: MovieClip;
 		public var screenWaitingPlayer: MovieClip;
+		public static var instance:ScreenTriquiWaiting;
 		
 		public function ScreenTriquiWaiting()
 		{
 			super("");
-			Locator.client.addEventListener(Client.EVENT_CONNECTED, evWaitingPlayer);
+			instance = this;
 		}
 		
 		override public function EvOnEnter():void{
@@ -22,18 +22,20 @@ package triqui
 			Spawn();
 		}
 		
-		private function Spawn():void
+		public function Spawn():void
 		{
 			screenWaitingConnection = Locator.assetsManager.GetMovieClip("MCWaitingConnection");
 			Locator.mainStage.addChild(screenWaitingConnection);
 		}
 		
-		private function evWaitingPlayer():void
+		public function evWaitingPlayer():void
 		{	
+			// Clean screen.
+			Locator.mainStage.removeChild(screenWaitingConnection);
+			screenWaitingConnection = null;
+			// Re-painting
 			screenWaitingPlayer = Locator.assetsManager.GetMovieClip("MCWaitingPlayer");
 			Locator.mainStage.addChild(screenWaitingPlayer);
 		}
-		
-		
 	}
 }
