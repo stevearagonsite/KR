@@ -23,7 +23,7 @@ package
 			serverInfo = new MC_ServerInfo();
 			stage.addChild(serverInfo);
 			
-			serverInfo.tb_ip.text = "127.0.0.1";
+			serverInfo.tb_ip.text = "192.168.0.248";
 			serverInfo.tb_port.text = "8087";
 			serverInfo.btn_start.addEventListener(MouseEvent.CLICK, evToggleServer);
 			
