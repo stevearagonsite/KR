@@ -12,6 +12,7 @@
 		<asset url="images/ButtonHowToPlay.png" name="ButtonHowToPlay" />
 		<asset url="images/ButtonHowToPlayDown.png" name="ButtonHowToPlayOVER" />
 		<asset url="swfs/Assets.swf" name="movieclips" />
+		<asset url="swfs/Triqui.swf" name="triqui" />
 		<asset url="images/MenuLevels.png" name="MenuLevels" />
 	</links>
 	

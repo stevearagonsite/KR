@@ -182,7 +182,7 @@ package engine{
 		}
 		
 		public function GetMovieClip(mcName:String):MovieClip{
-			for (var i:int = 0; i < allSWFs.length; i++) {
+			for (var i:int = 0; i <= allSWFs.length; i++) {
 				try{
 					//Creating a class, i can return movieclip.
 					var mcClass:Class = allSWFs[i].contentLoaderInfo.applicationDomain.getDefinition(mcName);
@@ -190,7 +190,6 @@ package engine{
 				}catch(e:ReferenceError){
 					Locator.console.Open();
 					Locator.console.WriteLn("It is not the MovieClip: " + mcName + ".");
-					return new MovieClip();
 				}
 			}
 			return null;

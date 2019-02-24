@@ -14,6 +14,7 @@ package
 	import GUI.ScreenIntro;
 	import GUI.ScreenLevels;
 	import GUI.ScreenMenu;
+	import triqui.ScreenTriquiWaiting;
 	
 	import engine.Locator;
 	
@@ -44,7 +45,8 @@ package
 			Locator.screenManager.RegisterScreen("HowToPlay", ScreenHowToPlay);
 			Locator.screenManager.RegisterScreen("Credits", ScreenCredits);
 			Locator.screenManager.RegisterScreen("MenuLevels", ScreenLevels);
-		
+			Locator.screenManager.RegisterScreen("TriquiWaiting", ScreenTriquiWaiting);
+			
 			Locator.screenManager.LoadScreen("Intro");
 		}
 		

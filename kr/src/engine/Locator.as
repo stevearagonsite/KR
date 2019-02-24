@@ -133,6 +133,12 @@ package engine
 			console.UnRegisterCommand("triqui");
 			client = new Client("TheProfe" + Math.random());
 			client.connect("192.168.0.248",8087);
+			client.addEventListener(Client.EVENT_CONNECTED, evConnectWithServer);
+		}
+		
+		private function evConnectWithServer():void
+		{
+			Locator.screenManager.LoadScreen("TriquiWaiting");
 		}
 		
 		public function Game():void{
@@ -140,7 +146,6 @@ package engine
 			console.RegisterCommand("resume", EvResume, "Is the command unpause the game(the animations and the controls are run now).");
 			console.RegisterCommand("remove", EvRemove, "Is the command destroyed all assets(all is remove and now is null).");
 			console.RegisterCommand("winner", EvWhoWin, "Who is the winner");
-			console.RegisterCommand("online", EvSave, "game tic.");
 			//console.RegisterCommand("save", EvSave, "I save the game.");
 			//console.RegisterCommand("load", EvLoad, "I load the game.");
 			
