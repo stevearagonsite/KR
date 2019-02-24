@@ -24,7 +24,7 @@ package
 		
 		public function Main(){
 			instance = this;
-			Locator.assetsManager.LoadXML("assets.xml");
+			Locator.assetsManager.LoadXML("engine/assets.xml");
 			Locator.assetsManager.addEventListener("xml_ready", EvXMLComplete);
 			Locator.assetsManager.addEventListener("all_assets_complete", EvIntro);//When the level is loaded.
 		}

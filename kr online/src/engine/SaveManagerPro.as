@@ -1,29 +1,30 @@
 package engine{
 	
-	import flash.filesystem.File;
+	/*import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.Dictionary;
 	
-	import engine.com.lia.crypto.AES;
+	import engine.com.lia.crypto.AES;*/
 	
 	public class SaveManagerPro{
 		
-		public var dataLoaded:Dictionary;
+		/*public var dataLoaded:Dictionary;
 		public var saver:FileStream//----->Ask about that??????.
 		public var file:File;
 		public var haveSave:Boolean;
 		
 		public const LOCATION:String = "KR/saves";//defult path for the savegames.
-		public const SAVE_NAME:String = "save.dat";
+		public const SAVE_NAME:String = "save.dat";*/
 		
 		public function SaveManagerPro(){
 			
-			trace("Starting SaveManagerPro ►");
-			file = File.documentsDirectory.resolvePath(LOCATION+"/mysave.sav");//Documents is the path to our savegame.
+			//trace("Starting SaveManagerPro ►");
+			//file = File.documentsDirectory.resolvePath(LOCATION+"/mysave.sav");//Documents is the path to our savegame.
+		
 		}
 		
-		public function Save(allData:Dictionary):void{
+		/*public function Save(allData:Dictionary):void{
 			
 			saver = new FileStream;
 			saver.open(file, FileMode.WRITE);
@@ -34,10 +35,10 @@ package engine{
 			}
 			
 			saver.writeUTF(parsed);
-			saver.close();
+			saver.close();*/
 		}
 		
-		public function Load():void{
+		/*public function Load():void{
 			
 			saver = new FileStream();
 			saver.open(file, FileMode.READ);
@@ -108,5 +109,5 @@ package engine{
 			dataLoaded = tempData;
 		}
 		
-	}
+	}*/
 }

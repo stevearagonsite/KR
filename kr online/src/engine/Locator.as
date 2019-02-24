@@ -133,18 +133,16 @@ package engine
 			console.UnRegisterCommand("triqui");
 			client = new Client("TheProfe" + Math.random());
 			client.connect("192.168.0.248",8087);
-			trace("Play triqui online!!");
 		}
 		
 		public function Game():void{
-			
 			console.RegisterCommand("pause", EvPause, "Is the command pause the game(the animations and the controls).");
 			console.RegisterCommand("resume", EvResume, "Is the command unpause the game(the animations and the controls are run now).");
 			console.RegisterCommand("remove", EvRemove, "Is the command destroyed all assets(all is remove and now is null).");
 			console.RegisterCommand("winner", EvWhoWin, "Who is the winner");
 			console.RegisterCommand("online", EvSave, "game tic.");
-			console.RegisterCommand("save", EvSave, "I save the game.");
-			console.RegisterCommand("load", EvLoad, "I load the game.");
+			//console.RegisterCommand("save", EvSave, "I save the game.");
+			//console.RegisterCommand("load", EvLoad, "I load the game.");
 			
 			updateManager.AddFunction(EvUpdates);
 		}
@@ -165,13 +163,13 @@ package engine
 				d["varBluePoints"] = hud.pointsBlue;
 				d["varTimeFinishGame"] = currentTimeToFinishGame;
 				
-				Locator.saveManagerPro.SaveEncrypted( d );
+				//Locator.saveManagerPro.SaveEncrypted( d );
 			}
 		}
 		
 		public function EvLoad():void{
 			
-			Locator.saveManagerPro.LoadEncrypted();
+			/*Locator.saveManagerPro.LoadEncrypted();
 			var d:Dictionary = Locator.saveManagerPro.dataLoaded;
 			if (saveManagerPro.haveSave){
 				
@@ -184,7 +182,7 @@ package engine
 				hud.pointsRed = d["varRedPoints"];
 				hud.pointsBlue = d["varBluePoints"];
 				currentTimeToFinishGame = d["varTimeFinishGame"];
-			}
+			}*/
 		}
 		
 		protected function EvUpdates(event:Event):void{
@@ -477,7 +475,7 @@ package engine
 		
 		protected function EvKeys(event:KeyboardEvent):void{
 			if (event.keyCode == Keyboard.ESCAPE && stateFullScreen){
-				mainStage.nativeWindow.x = mainStage.nativeWindow.y = 0;//I can control the windows position.
+				//mainStage.nativeWindow.x = mainStage.nativeWindow.y = 0;//I can control the windows position.
 				//mainStage.nativeWindow.width = 800;//I can control size width.
 				//mainStage.nativeWindow.height = 600;//I can control size height.
 				stateFullScreen = false;//Value state screen.

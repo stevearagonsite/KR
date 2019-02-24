@@ -1,6 +1,6 @@
 package engine
 {
-	import flash.desktop.NativeApplication;
+	//import flash.desktop.NativeApplication;
 	import flash.events.KeyboardEvent;
 	import flash.system.fscommand;
 	import flash.ui.Keyboard;
@@ -33,7 +33,7 @@ package engine
 		//Here i can exit for the program.
 		private function Exit():void{
 			fscommand("quit");//Use a .exe format.
-			NativeApplication.nativeApplication.exit();//Use the AIR.
+			//NativeApplication.nativeApplication.exit();//Use the AIR.
 		}
 		
 		//Here clean the counter in console.
