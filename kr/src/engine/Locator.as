@@ -133,11 +133,6 @@ package engine
 			console.UnRegisterCommand("triqui");
 			client = new Client("TheProfe" + Math.random());
 			client.connect("192.168.0.248",8087);
-			client.addEventListener(Client.EVENT_CONNECTED, evConnectWithServer);
-		}
-		
-		private function evConnectWithServer():void
-		{
 			Locator.screenManager.LoadScreen("TriquiWaiting");
 		}
 		

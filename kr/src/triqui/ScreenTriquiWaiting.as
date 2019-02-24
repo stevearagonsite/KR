@@ -1,17 +1,20 @@
 package triqui
 {
-	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	
 	import engine.Locator;
 	import engine.Screen;
+	import net.Client;
 
 	public class ScreenTriquiWaiting extends Screen
 	{
-		public var screenWaiting: MovieClip;
+		public var screenWaitingConnection: MovieClip;
+		public var screenWaitingPlayer: MovieClip;
+		
 		public function ScreenTriquiWaiting()
 		{
 			super("");
+			Locator.client.addEventListener(Client.EVENT_CONNECTED, evWaitingPlayer);
 		}
 		
 		override public function EvOnEnter():void{
@@ -21,8 +24,16 @@ package triqui
 		
 		private function Spawn():void
 		{
-			screenWaiting = Locator.assetsManager.GetMovieClip("MCwaiting");
-			Locator.mainStage.addChild(screenWaiting);
+			screenWaitingConnection = Locator.assetsManager.GetMovieClip("MCWaitingConnection");
+			Locator.mainStage.addChild(screenWaitingConnection);
 		}
+		
+		private function evWaitingPlayer():void
+		{	
+			screenWaitingPlayer = Locator.assetsManager.GetMovieClip("MCWaitingPlayer");
+			Locator.mainStage.addChild(screenWaitingPlayer);
+		}
+		
+		
 	}
 }
