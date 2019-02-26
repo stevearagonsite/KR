@@ -18,11 +18,30 @@ package triqui
 		public static var client:Client;
 		public static var clientPartner:String;
 		public static var allClientsEnables:Vector.<String> = new Vector.<String>();
-		private static var _inGame:Boolean = false;
-		private static var _actionByMessage:Dictionary = new Dictionary();
-		private static var _cells:Dictionary = new Dictionary();
+		private var _inGame:Boolean = false;
+		private var _myTurn:Boolean = false;
+		private var _actionByMessage:Dictionary = new Dictionary();
+		private var _cells:Dictionary = new Dictionary();
+		private var _myMovements:Vector.<String> = new Vector.<String>(); 
+		private var _partnerMovements:Vector.<String> = new Vector.<String>(); 
+		private var _triquiCells:MovieClip;
+		private var _myShape:String = "O";
+		private var _partnerShape:String = "X";
+		private var _shapes:Vector.<MovieClip> = new Vector.<MovieClip>();
 		
-		private static var triquiCells:MovieClip;
+		private static const _WINNING_MOVEMENTS:Array = [
+			//Horizontal
+			["mc_trigger0x0","mc_trigger1x0","mc_trigger2x0"],
+			["mc_trigger0x1","mc_trigger1x1","mc_trigger2x1"],
+			["mc_trigger0x2","mc_trigger1x2","mc_trigger2x2"],
+			//Vertical
+			["mc_trigger0x0","mc_trigger0x1","mc_trigger0x2"],
+			["mc_trigger1x0","mc_trigger1x1","mc_trigger1x2"],
+			["mc_trigger2x0","mc_trigger2x1","mc_trigger2x2"],
+			//Diagonal
+			["mc_trigger0x0","mc_trigger1x1","mc_trigger2x2"],
+			["mc_trigger0x2","mc_trigger1x1","mc_trigger2x0"]
+		];
 		
 		public function NetworkTriqui()
 		{
@@ -65,7 +84,6 @@ package triqui
 			if (!_inGame){
 				_inGame = true;
 				clientPartner = params.client;
-				//trace("clientPartner: " + clientPartner);
 				client.sendMessageTo("*","changeState",{state:_inGame, client: client.data.name});
 				onGame();
 			}
@@ -79,6 +97,7 @@ package triqui
 				// Update all users that this client is in game.
 				client.sendMessageTo("*","changeState",{state:_inGame, client: client.data.name});
 				//trace("clientPartner: " + clientPartner);
+				_myTurn = true;
 				onGame();
 			}else{
 				//trace("refuse!!");
@@ -100,7 +119,13 @@ package triqui
 		
 		/** Diccionary Acction [key] = move; parameters();**/
 		public function moveGame(params:Object):void{
-			trace("move game"+ " cell:" + params.cell);
+			_myTurn = true;
+			_partnerMovements.push(params.cell);
+			createShape(_partnerShape, params.posX, params.posY);
+			//VERIFY!!!!!
+			if (evaluationGameState(_partnerMovements)){
+				trace("You lost!!");
+			}
 		}
 		
 		public function removeEnablePlayer(name:String):void{
@@ -190,15 +215,15 @@ package triqui
 		public function game():void{
 			Locator.cam.on();
 			Locator.cam.addToView(Locator.level);
-			triquiCells = Locator.assetsManager.GetMovieClip("MCcells");
-			triquiCells.x = Locator.mainStage.stageWidth/2;
-			triquiCells.y = Locator.mainStage.stageHeight/2;
-			Locator.layer1.addChild(triquiCells);
+			_triquiCells = Locator.assetsManager.GetMovieClip("MCcells");
+			_triquiCells.x = Locator.mainStage.stageWidth/2;
+			_triquiCells.y = Locator.mainStage.stageHeight/2;
+			Locator.layer1.addChild(_triquiCells);
 			
 			for(var i:int = 0; i <= 2;i++ ){
 				for(var j:int = 0; j <= 2;j++ ){
 					var name:String = "mc_trigger"+i+"x"+j;
-					var cell:DisplayObject = triquiCells.getChildByName(name);
+					var cell:DisplayObject = _triquiCells.getChildByName(name);
 					cell.addEventListener(MouseEvent.CLICK,evTrigger);
 					cell.alpha = 0;
 					_cells[name] = cell;
@@ -206,13 +231,67 @@ package triqui
 			}
 		}
 		
-		public function evTrigger(event:Event):void{
+		private function evTrigger(event:Event):void{
 			var target:MovieClip = (event.target as MovieClip);
-			client.sendMessageTo(clientPartner,"move",{cell: target.name});
+			if (_myTurn){
+				for(var i:int = 0; i < _myMovements.length;i++ ){
+					if (_myMovements[i] == target.name){
+						return;
+					}
+				}
+				for(var j:int = 0; j < _partnerMovements.length;j++ ){
+					if (_partnerMovements[j] == target.name){
+						return;
+					}
+				}
+				_myMovements.push(target.name);
+				var referenceX:Number = _triquiCells.x + target.x;
+				var referenceY:Number = _triquiCells.y + target.y;
+				client.sendMessageTo(clientPartner,"move",{cell: target.name, posX: referenceX, posY: referenceY});
+				_myTurn = false;
+				createShape(_myShape, referenceX, referenceY);
+				trace(target.name);
+				//VERIFY STATE!!!!!
+				if (evaluationGameState(_myMovements)){
+					trace("You won!!");
+				}
+			}
+		}
+		
+		public function createShape(key:String, positionX:int, positionY:int):void{
+			var numRandom:int = Locator.instance.GetRandom(0,2);
+			var shape:MovieClip = Locator.assetsManager.GetMovieClip("MC-"+key+"-0"+numRandom);
+			Locator.layer2.addChild(shape);
+			shape.x = positionX;
+			shape.y = positionY;
+		}
+		
+		private function evaluationGameState(listMovements:Vector.<String>):Boolean{
+			var count:int = 0;
+			
+			for each(var caseToWin:Array in _WINNING_MOVEMENTS){
+				for(var i:int = 0; i < caseToWin.length; i++){
+					for(var j:int = 0; j < listMovements.length; j++){
+						if (listMovements[j] == caseToWin[i]){
+							count += 1;
+						}
+					}
+				}
+				if (count > 2){
+					return true;
+				}else{
+					count = 0;
+				}
+			}
+			return false;
 		}
 
-		private function leave():void
-		{
+		public function leave():void{
+			cleanNetwork();
+			cleanGame();
+		}
+		
+		private function cleanNetwork():void{
 			Locator.console.RegisterCommand("triqui", evTriqui, "Online game triqui!!.");
 			
 			if (allClientsEnables && allClientsEnables.length > 0){
@@ -228,11 +307,39 @@ package triqui
 			client = null;
 			clientPartner = null;
 			_inGame = false;
-						
+			
 			client.removeEventListener(Client.EVENT_CONNECTED, connectedWithServer);
 			client.removeEventListener(Client.EVENT_GET_ALL_CLIENTS, evGetAllClient);
 			client.removeEventListener(Client.EVENT_NEW_CLIENT, newPlayer);
 			client.removeEventListener(Client.EVENT_CLIENT_DISCONNECTED, evClientDisconnected);
+		}
+		
+		private function cleanGame():void{
+			
+			for ( var key: Object in _cells ){
+				_cells[key] = null;
+				delete _cells[key];
+			}
+			
+			if (_myMovements && _myMovements.length > 0){
+				for (var j:int = _myMovements.length; j < 0; j--){
+					_myMovements[j] = null;
+					_myMovements.splice(j,1);
+				}
+				_myMovements = null;
+				_myMovements = new Vector.<String>();
+			}
+			
+			if (_partnerMovements && _partnerMovements.length > 0){
+				for (var k:int = _partnerMovements.length; k < 0; k--){
+					_partnerMovements[k] = null;
+					_partnerMovements.splice(k,1);
+				}
+				_partnerMovements = null;
+				_partnerMovements = new Vector.<String>();
+			}
+			
+			_myTurn = false;
 		}
 	}
 }
