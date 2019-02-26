@@ -1,6 +1,6 @@
 package triqui
 {
-	import flash.display.MovieClip;
+	import flash.display.Bitmap;
 	
 	import engine.Locator;
 	import engine.Screen;
@@ -8,8 +8,8 @@ package triqui
 	public class ScreenTriquiWaiting extends Screen
 	{
 		public static var instance:ScreenTriquiWaiting;
-		public var screenWaitingConnection: MovieClip;
-		public var screenWaitingPlayer: MovieClip;
+		public var screenWaitingConnection: Bitmap;
+		public var screenWaitingPlayer: Bitmap;
 		
 		public function ScreenTriquiWaiting()
 		{
@@ -24,7 +24,9 @@ package triqui
 		
 		public function Spawn():void
 		{
-			screenWaitingConnection = Locator.assetsManager.GetMovieClip("MCWaitingConnection");
+			screenWaitingConnection = Locator.assetsManager.GetImage("ServerConnection");
+			screenWaitingConnection.width = Locator.mainStage.stageWidth;
+			screenWaitingConnection.height = Locator.mainStage.stageHeight;
 			model.addChild(screenWaitingConnection);
 		}
 		
@@ -34,7 +36,9 @@ package triqui
 			model.removeChild(screenWaitingConnection);
 			screenWaitingConnection = null;
 			// Re-painting
-			screenWaitingPlayer = Locator.assetsManager.GetMovieClip("MCWaitingPlayer");
+			screenWaitingPlayer = Locator.assetsManager.GetImage("WaitingForPlay");
+			screenWaitingPlayer.width = Locator.mainStage.stageWidth;
+			screenWaitingPlayer.height = Locator.mainStage.stageHeight;
 			model.addChild(screenWaitingPlayer);
 		}
 		
@@ -53,6 +57,7 @@ package triqui
 		}
 		
 		override public function EvOnExit():void{
+			//evRemover();
 			super.EvOnExit();
 		}
 	}

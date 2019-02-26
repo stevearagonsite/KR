@@ -22,9 +22,9 @@ package triqui
 		private function Spawn():void
 		{
 			background = Locator.assetsManager.GetImage("BackgroundTriqui");
-			model.addChild(background);
 			background.width = Locator.mainStage.stageWidth;
 			background.height = Locator.mainStage.stageHeight;
+			model.addChild(background);
 		}
 		
 		override public function EvOnExit():void{

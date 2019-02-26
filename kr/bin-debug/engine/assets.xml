@@ -4,7 +4,6 @@
 		<asset url="sounds/click.mp3" name="SNDclick" />
 		<asset url="images/Menu.png" name="BackgroundMenu" />
 		<asset url="images/Credits.png" name="BackgroundCredits" />
-		<asset url="images/backgroundTriqui.png" name="BackgroundTriqui" />
 		<asset url="images/HowToPlay.png" name="BackgroundHowToPlay" />
 		<asset url="images/ButtonStart.png" name="ButtonStart" />
 		<asset url="images/ButtonStartDown.png" name="ButtonStartOVER" />
@@ -12,6 +11,9 @@
 		<asset url="images/ButtonCreditsDown.png" name="ButtonCreditsOVER" />
 		<asset url="images/ButtonHowToPlay.png" name="ButtonHowToPlay" />
 		<asset url="images/ButtonHowToPlayDown.png" name="ButtonHowToPlayOVER" />
+		<asset url="images/BackgroundTriqui.jpg" name="BackgroundTriqui" />
+		<asset url="images/ServerConnection.jpg" name="ServerConnection" />
+		<asset url="images/WaitingForPlay.jpg" name="WaitingForPlay" />
 		<asset url="swfs/Assets.swf" name="movieclips" />
 		<asset url="swfs/Triqui.swf" name="triqui" />
 		<asset url="images/MenuLevels.png" name="MenuLevels" />

@@ -28,6 +28,7 @@ package triqui
 		private var _myShape:String = "O";
 		private var _partnerShape:String = "X";
 		private var _shapes:Vector.<MovieClip> = new Vector.<MovieClip>();
+		private var _winnerState:String = "";
 		
 		private static const _WINNING_MOVEMENTS:Array = [
 			//Horizontal
@@ -125,6 +126,12 @@ package triqui
 			//VERIFY!!!!!
 			if (evaluationGameState(_partnerMovements)){
 				trace("You lost!!");
+				_winnerState = "gameover";
+			}
+			var countCells:int = _myMovements.length + _partnerMovements.length;
+			if (countCells >= 9 && _winnerState.length == 0){
+				trace("Tie");
+				_winnerState = "tie";
 			}
 		}
 		
@@ -209,7 +216,7 @@ package triqui
 		public function onGame():void
 		{
 			ScreenTriquiWaiting.instance.havePartner();
-			setTimeout(game,3000);
+			setTimeout(game,1000);
 		}
 		
 		public function game():void{
@@ -233,7 +240,7 @@ package triqui
 		
 		private function evTrigger(event:Event):void{
 			var target:MovieClip = (event.target as MovieClip);
-			if (_myTurn){
+			if (_myTurn && _winnerState.length == 0){
 				for(var i:int = 0; i < _myMovements.length;i++ ){
 					if (_myMovements[i] == target.name){
 						return;
@@ -254,6 +261,12 @@ package triqui
 				//VERIFY STATE!!!!!
 				if (evaluationGameState(_myMovements)){
 					trace("You won!!");
+					_winnerState = "winner";
+				}
+				var countCells:int = _myMovements.length + _partnerMovements.length;
+				if (countCells >= 9){
+					trace("Tie");
+					_winnerState = "tie";
 				}
 			}
 		}
