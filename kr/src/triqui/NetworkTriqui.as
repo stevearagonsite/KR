@@ -1,7 +1,12 @@
 package triqui
 {
 
+	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
+	import flash.utils.setTimeout;
 	
 	import engine.Locator;
 	
@@ -13,9 +18,11 @@ package triqui
 		public static var client:Client;
 		public static var clientPartner:String;
 		public static var allClientsEnables:Vector.<String> = new Vector.<String>();
-		
 		private static var _inGame:Boolean = false;
 		private static var _actionByMessage:Dictionary = new Dictionary();
+		private static var _cells:Dictionary = new Dictionary();
+		
+		private static var triquiCells:MovieClip;
 		
 		public function NetworkTriqui()
 		{
@@ -48,7 +55,7 @@ package triqui
 		
 		/** Execute action with receive message  **/
 		private function evReceiveMessage(message:String, params:Object):void{
-			trace("message: "+ message);
+			//trace("message: "+ message);
 			_actionByMessage[message](params);
 		}
 		
@@ -56,11 +63,11 @@ package triqui
 		public function requestGame(params:Object):void{
 			client.sendMessageTo(params.client,"responseRequest",{response:!_inGame, client: client.data.name});
 			if (!_inGame){
-				
 				_inGame = true;
 				clientPartner = params.client;
-				trace("clientPartner: " + clientPartner);
+				//trace("clientPartner: " + clientPartner);
 				client.sendMessageTo("*","changeState",{state:_inGame, client: client.data.name});
+				onGame();
 			}
 		}
 		
@@ -71,9 +78,10 @@ package triqui
 				clientPartner = params.client;
 				// Update all users that this client is in game.
 				client.sendMessageTo("*","changeState",{state:_inGame, client: client.data.name});
-				trace("clientPartner: " + clientPartner);
+				//trace("clientPartner: " + clientPartner);
+				onGame();
 			}else{
-				trace("refuse!!");
+				//trace("refuse!!");
 				removeEnablePlayer(params.client);
 			}
 		}
@@ -92,14 +100,14 @@ package triqui
 		
 		/** Diccionary Acction [key] = move; parameters();**/
 		public function moveGame(params:Object):void{
-			trace("move game");
+			trace("move game"+ " cell:" + params.cell);
 		}
 		
 		public function removeEnablePlayer(name:String):void{
 			for each (var i:int in allClientsEnables) 
 			{
 				if (allClientsEnables[i] == name){
-					trace("remove");
+					//trace("remove");
 					allClientsEnables.splice(i,1);
 				}
 			}
@@ -112,7 +120,7 @@ package triqui
 					name != allClientsEnables[i] && 
 					name.indexOf("NoName", 2) == -1 )
 				{
-					trace("add");
+					//trace("add");
 					allClientsEnables.push(name);
 				}
 			}
@@ -122,6 +130,7 @@ package triqui
 		/** Events-client **/
 		private function connectedWithServer():void
 		{
+			Locator.console.Close();
 			ScreenTriquiWaiting.instance.evWaitingPlayer();
 		}
 		
@@ -172,14 +181,53 @@ package triqui
 			}
 		}
 		
-		public function game():void
+		public function onGame():void
 		{
+			ScreenTriquiWaiting.instance.havePartner();
+			setTimeout(game,3000);
+		}
+		
+		public function game():void{
+			Locator.cam.on();
+			Locator.cam.addToView(Locator.level);
+			triquiCells = Locator.assetsManager.GetMovieClip("MCcells");
+			triquiCells.x = Locator.mainStage.stageWidth/2;
+			triquiCells.y = Locator.mainStage.stageHeight/2;
+			Locator.layer1.addChild(triquiCells);
 			
+			for(var i:int = 0; i <= 2;i++ ){
+				for(var j:int = 0; j <= 2;j++ ){
+					var name:String = "mc_trigger"+i+"x"+j;
+					var cell:DisplayObject = triquiCells.getChildByName(name);
+					cell.addEventListener(MouseEvent.CLICK,evTrigger);
+					cell.alpha = 0;
+					_cells[name] = cell;
+				}
+			}
+		}
+		
+		public function evTrigger(event:Event):void{
+			var target:MovieClip = (event.target as MovieClip);
+			client.sendMessageTo(clientPartner,"move",{cell: target.name});
 		}
 
 		private function leave():void
 		{
 			Locator.console.RegisterCommand("triqui", evTriqui, "Online game triqui!!.");
+			
+			if (allClientsEnables && allClientsEnables.length > 0){
+				for (var i:int = allClientsEnables.length; i < 0; i--)
+				{
+					allClientsEnables[i] = null;
+					allClientsEnables.splice(i,1);
+				}
+				allClientsEnables = null;
+				allClientsEnables = new Vector.<String>();
+			}
+			
+			client = null;
+			clientPartner = null;
+			_inGame = false;
 						
 			client.removeEventListener(Client.EVENT_CONNECTED, connectedWithServer);
 			client.removeEventListener(Client.EVENT_GET_ALL_CLIENTS, evGetAllClient);

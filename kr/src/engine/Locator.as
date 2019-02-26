@@ -89,14 +89,14 @@ package engine
 		public static var timerEnd:Timer;
 		public var win:MovieClip;
 		
-		public static var client:Client;
-		
 		public static var audioTrackRed:SoundController;
 		public static var audioTrackBlue:SoundController;
 		public static var audioDamageShoot:SoundController;
 		public static var audioDamage:SoundController;
 		public static var audioWin:SoundController;
 		public static var audioPoint:SoundController;
+		
+		public static var client:Client;
 		public static var networkTriqui: NetworkTriqui;
 		
 		public function Locator(){

@@ -4,6 +4,7 @@
 		<asset url="sounds/click.mp3" name="SNDclick" />
 		<asset url="images/Menu.png" name="BackgroundMenu" />
 		<asset url="images/Credits.png" name="BackgroundCredits" />
+		<asset url="images/backgroundTriqui.png" name="BackgroundTriqui" />
 		<asset url="images/HowToPlay.png" name="BackgroundHowToPlay" />
 		<asset url="images/ButtonStart.png" name="ButtonStart" />
 		<asset url="images/ButtonStartDown.png" name="ButtonStartOVER" />

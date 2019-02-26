@@ -114,6 +114,7 @@ package GUI{
 		
 		override public function EvOnExit():void{
 			Locator.mainStage.removeEventListener("FinishedLevel", EvEndLevel);
+			EvRemover();
 			super.EvOnExit();
 		}
 		

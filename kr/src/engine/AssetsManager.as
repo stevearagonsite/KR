@@ -188,8 +188,8 @@ package engine{
 					var mcClass:Class = allSWFs[i].contentLoaderInfo.applicationDomain.getDefinition(mcName);
 					return new mcClass();
 				}catch(e:ReferenceError){
-					Locator.console.Open();
-					Locator.console.WriteLn("It is not the MovieClip: " + mcName + ".");
+					//Locator.console.Open();
+					//Locator.console.WriteLn("It is not the MovieClip: " + mcName + ".");
 				}
 			}
 			return null;

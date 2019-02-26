@@ -7,9 +7,9 @@ package triqui
 
 	public class ScreenTriquiWaiting extends Screen
 	{
+		public static var instance:ScreenTriquiWaiting;
 		public var screenWaitingConnection: MovieClip;
 		public var screenWaitingPlayer: MovieClip;
-		public static var instance:ScreenTriquiWaiting;
 		
 		public function ScreenTriquiWaiting()
 		{
@@ -25,17 +25,35 @@ package triqui
 		public function Spawn():void
 		{
 			screenWaitingConnection = Locator.assetsManager.GetMovieClip("MCWaitingConnection");
-			Locator.mainStage.addChild(screenWaitingConnection);
+			model.addChild(screenWaitingConnection);
 		}
 		
 		public function evWaitingPlayer():void
 		{	
 			// Clean screen.
-			Locator.mainStage.removeChild(screenWaitingConnection);
+			model.removeChild(screenWaitingConnection);
 			screenWaitingConnection = null;
 			// Re-painting
 			screenWaitingPlayer = Locator.assetsManager.GetMovieClip("MCWaitingPlayer");
-			Locator.mainStage.addChild(screenWaitingPlayer);
+			model.addChild(screenWaitingPlayer);
+		}
+		
+		public function havePartner():void{
+			trace("ready online!!");
+			changeScreen("TriquiGame");
+		}
+		
+		public function evRemover():void{
+			if (screenWaitingConnection || screenWaitingPlayer){
+				model.removeChild(screenWaitingConnection);
+				screenWaitingConnection = null;
+				model.removeChild(screenWaitingPlayer);
+				screenWaitingPlayer = null;
+			}
+		}
+		
+		override public function EvOnExit():void{
+			super.EvOnExit();
 		}
 	}
 }
