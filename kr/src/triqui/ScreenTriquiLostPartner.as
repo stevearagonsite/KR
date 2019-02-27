@@ -19,7 +19,7 @@ package triqui
 		
 		private function Spawn():void
 		{
-			
+			changeScreen("TriquiGame");
 		}
 		
 		override public function EvOnExit():void{

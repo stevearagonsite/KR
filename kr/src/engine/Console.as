@@ -126,6 +126,7 @@ package engine
 		
 		//Clouse the console.
 		public function Close():void{
+			isOpened = false;
 			Locator.mainStage.removeChild(model);
 			Locator.mainStage.focus = Locator.mainStage;
 		}

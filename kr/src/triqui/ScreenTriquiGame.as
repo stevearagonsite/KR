@@ -27,7 +27,17 @@ package triqui
 			model.addChild(background);
 		}
 		
+		public function returnToMenu():void{
+			changeScreen("Menu");
+		}
+		
+		public function evRemover():void{
+			model.removeChild(background);
+			background = null;
+		}
+		
 		override public function EvOnExit():void{
+			evRemover();
 			super.EvOnExit();
 		}
 	}

@@ -43,21 +43,22 @@ package triqui
 		}
 		
 		public function havePartner():void{
-			trace("ready online!!");
 			changeScreen("TriquiGame");
 		}
 		
 		public function evRemover():void{
-			if (screenWaitingConnection || screenWaitingPlayer){
+			if (screenWaitingConnection){
 				model.removeChild(screenWaitingConnection);
 				screenWaitingConnection = null;
+			}
+			if (screenWaitingConnection){
 				model.removeChild(screenWaitingPlayer);
 				screenWaitingPlayer = null;
 			}
 		}
 		
 		override public function EvOnExit():void{
-			//evRemover();
+			evRemover();
 			super.EvOnExit();
 		}
 	}

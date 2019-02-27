@@ -29,6 +29,7 @@ package triqui
 		private var _partnerShape:String = "X";
 		private var _shapes:Vector.<MovieClip> = new Vector.<MovieClip>();
 		private var _winnerState:String = "";
+		private var _win:MovieClip;
 		
 		private static const _WINNING_MOVEMENTS:Array = [
 			//Horizontal
@@ -57,10 +58,14 @@ package triqui
 		
 		private function evTriqui():void
 		{
-			Locator.console.UnRegisterCommand("triqui");
 			Locator.screenManager.LoadScreen("TriquiWaiting");
 
-			client = new Client("ThePlayer" + Math.random());
+			if (client){
+				connectedWithServer();
+			}
+			if (!client){		
+				client = new Client("ThePlayer" + Math.random());
+			}
 			client.connect("127.0.0.1",8087);
 			
 			client.addEventListener(Client.EVENT_CONNECTED, connectedWithServer);
@@ -125,13 +130,11 @@ package triqui
 			createShape(_partnerShape, params.posX, params.posY);
 			//VERIFY!!!!!
 			if (evaluationGameState(_partnerMovements)){
-				trace("You lost!!");
-				_winnerState = "gameover";
+				evFinalState("loser");
 			}
 			var countCells:int = _myMovements.length + _partnerMovements.length;
 			if (countCells >= 9 && _winnerState.length == 0){
-				trace("Tie");
-				_winnerState = "tie";
+				evFinalState("tie");
 			}
 		}
 		
@@ -197,7 +200,7 @@ package triqui
 		/** Events-client **/
 		public function evClientDisconnected(data:ClientData):void
 		{
-			for (var i:int = allClientsEnables.length; i < 0; i--) 
+			for (var i:int = allClientsEnables.length - 1; i >= 0; i--) 
 			{
 				if(allClientsEnables[i] == client.data.name)
 				{
@@ -260,13 +263,11 @@ package triqui
 				trace(target.name);
 				//VERIFY STATE!!!!!
 				if (evaluationGameState(_myMovements)){
-					trace("You won!!");
-					_winnerState = "winner";
+					evFinalState("winner");
 				}
 				var countCells:int = _myMovements.length + _partnerMovements.length;
 				if (countCells >= 9){
-					trace("Tie");
-					_winnerState = "tie";
+					evFinalState("tie");
 				}
 			}
 		}
@@ -275,8 +276,33 @@ package triqui
 			var numRandom:int = Locator.instance.GetRandom(0,2);
 			var shape:MovieClip = Locator.assetsManager.GetMovieClip("MC-"+key+"-0"+numRandom);
 			Locator.layer2.addChild(shape);
+			_shapes.push(shape);
 			shape.x = positionX;
 			shape.y = positionY;
+		}
+		
+		private function evFinalState(state:String):void{
+			_win = Locator.assetsManager.GetMovieClip("MCwinTriqui");
+			Locator.mainStage.addChild(_win);
+			_win.x = Locator.mainStage.stageWidth/2;
+			_win.y = Locator.mainStage.stageHeight/2;
+			
+			//var colorInfo:ColorTransform;
+			//colorInfo = new ColorTransform();
+			
+			if ("winner" == state){
+				//colorInfo.color = 0xff0000;
+				_win.tb_winner.text = state;
+			}else if ("loser" == state){
+				//colorInfo.color = 0x0000ff;
+				_win.tb_winner.text = state;
+			}
+			
+			
+			//_win.mc_colorWin.transform.colorTransform = colorInfo;
+			_win.tb_winner.text = state;
+			//OUT GAME
+			setTimeout(leave,3000);
 		}
 		
 		private function evaluationGameState(listMovements:Vector.<String>):Boolean{
@@ -300,15 +326,15 @@ package triqui
 		}
 
 		public function leave():void{
-			cleanNetwork();
 			cleanGame();
+			cleanNetwork();
+			Locator.screenManager.LoadScreen("Menu");
 		}
 		
 		private function cleanNetwork():void{
-			Locator.console.RegisterCommand("triqui", evTriqui, "Online game triqui!!.");
 			
 			if (allClientsEnables && allClientsEnables.length > 0){
-				for (var i:int = allClientsEnables.length; i < 0; i--)
+				for (var i:int = allClientsEnables.length - 1; i >= 0; i--)
 				{
 					allClientsEnables[i] = null;
 					allClientsEnables.splice(i,1);
@@ -317,25 +343,26 @@ package triqui
 				allClientsEnables = new Vector.<String>();
 			}
 			
-			client = null;
-			clientPartner = null;
-			_inGame = false;
-			
 			client.removeEventListener(Client.EVENT_CONNECTED, connectedWithServer);
 			client.removeEventListener(Client.EVENT_GET_ALL_CLIENTS, evGetAllClient);
 			client.removeEventListener(Client.EVENT_NEW_CLIENT, newPlayer);
 			client.removeEventListener(Client.EVENT_CLIENT_DISCONNECTED, evClientDisconnected);
+			
+			client.connect("0.0.0.0",0);
+			clientPartner = null;
+			_inGame = false;
 		}
 		
 		private function cleanGame():void{
 			
 			for ( var key: Object in _cells ){
+				_cells[key].removeEventListener(MouseEvent.CLICK,evTrigger);
 				_cells[key] = null;
 				delete _cells[key];
 			}
 			
 			if (_myMovements && _myMovements.length > 0){
-				for (var j:int = _myMovements.length; j < 0; j--){
+				for (var j:int = _myMovements.length - 1; j >= 0; j--){
 					_myMovements[j] = null;
 					_myMovements.splice(j,1);
 				}
@@ -344,7 +371,7 @@ package triqui
 			}
 			
 			if (_partnerMovements && _partnerMovements.length > 0){
-				for (var k:int = _partnerMovements.length; k < 0; k--){
+				for (var k:int = _partnerMovements.length - 1; k >= 0; k--){
 					_partnerMovements[k] = null;
 					_partnerMovements.splice(k,1);
 				}
@@ -352,7 +379,24 @@ package triqui
 				_partnerMovements = new Vector.<String>();
 			}
 			
+			if (_shapes && _shapes.length > 0){
+				for (var z:int = _shapes.length - 1; z >= 0; z--){
+					Locator.layer2.removeChild(_shapes[z]);
+					_shapes[z] = null;
+					_shapes.splice(z,1);
+				}
+				_shapes = null;
+				_shapes = new Vector.<MovieClip>();
+			}
+			
+			Locator.layer1.removeChild(_triquiCells);
+			Locator.mainStage.removeChild(_win);
+			Locator.cam.removeFromView(Locator.level);
+			Locator.cam.off();
+			_triquiCells = null;
+			_win = null;
 			_myTurn = false;
+			_winnerState = "";
 		}
 	}
 }
