@@ -69,8 +69,12 @@ package engine
 		//This event execute the console or close the console.
 		protected function EvKeyUp(event:KeyboardEvent):void{
 			if (event.keyCode == keyForOpenConsole){
-				!isOpened ? Open() : Close();
 				isOpened = !isOpened;
+				if (isOpened){
+					Open();
+				}else {
+					Close();
+				}
 			}else if (isOpened && event.keyCode == Keyboard.ENTER){//Here execute the command.
 				ExeCommand(model.tb_textIn.text.toLowerCase());//Execute the command in lower case.
 				model.tb_textIn.text = "";
@@ -116,6 +120,7 @@ package engine
 		
 		//Open the console.
 		public function Open():void{
+			isOpened = true;
 			Locator.mainStage.addChild(model);
 			Locator.mainStage.focus = model.tb_textIn;
 			model.tb_textIn.text = "";
@@ -127,8 +132,10 @@ package engine
 		//Clouse the console.
 		public function Close():void{
 			isOpened = false;
-			Locator.mainStage.removeChild(model);
-			Locator.mainStage.focus = Locator.mainStage;
+			if (model){
+				Locator.mainStage.removeChild(model);
+				Locator.mainStage.focus = Locator.mainStage;
+			}
 		}
 		
 		//it is the user information.

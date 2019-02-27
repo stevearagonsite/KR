@@ -16,6 +16,7 @@ package triqui
 	public class NetworkTriqui
 	{
 		public static var client:Client;
+		public static var instance:NetworkTriqui;
 		public static var clientPartner:String;
 		public static var allClientsEnables:Vector.<String> = new Vector.<String>();
 		private var _inGame:Boolean = false;
@@ -53,10 +54,10 @@ package triqui
 			_actionByMessage["changeState"] = playerChangeState;
 			_actionByMessage["move"] = moveGame;
 			
-			Locator.console.RegisterCommand("triqui", evTriqui, "Online game triqui!!.");
+			instance = this;
 		}
 		
-		private function evTriqui():void
+		public function evTriqui():void
 		{
 			Locator.screenManager.LoadScreen("TriquiWaiting");
 
@@ -206,6 +207,11 @@ package triqui
 				{
 					allClientsEnables.splice(allClientsEnables[i], i);
 				}
+			}
+			if (data.name == clientPartner){
+				cleanGame();
+				cleanNetwork();
+				Locator.screenManager.LoadScreen("TriquiLostPartner");
 			}
 		}
 		
@@ -389,12 +395,18 @@ package triqui
 				_shapes = new Vector.<MovieClip>();
 			}
 			
-			Locator.layer1.removeChild(_triquiCells);
-			Locator.mainStage.removeChild(_win);
+			if (_triquiCells){
+				Locator.layer1.removeChild(_triquiCells);
+				_triquiCells = null;
+			}
+			
+			if (_win){
+				Locator.mainStage.removeChild(_win);
+				_win = null;
+			}
+			
 			Locator.cam.removeFromView(Locator.level);
 			Locator.cam.off();
-			_triquiCells = null;
-			_win = null;
 			_myTurn = false;
 			_winnerState = "";
 		}

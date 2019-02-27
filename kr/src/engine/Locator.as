@@ -15,6 +15,7 @@ package engine
 	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
+	
 	import Ambient.Camera2D;
 	import Ambient.SoundController;
 	import Characters.Characters;
@@ -122,9 +123,11 @@ package engine
 
 			mainStage.addEventListener(KeyboardEvent.KEY_UP, EvKeys);
 			networkTriqui = new NetworkTriqui();
+			console.RegisterCommand("triqui", networkTriqui.evTriqui, "Online game triqui!!.");
 		}
 		
 		public function Game():void{
+			console.UnRegisterCommand("triqui");
 			console.RegisterCommand("pause", EvPause, "Is the command pause the game(the animations and the controls).");
 			console.RegisterCommand("resume", EvResume, "Is the command unpause the game(the animations and the controls are run now).");
 			console.RegisterCommand("remove", EvRemove, "Is the command destroyed all assets(all is remove and now is null).");
@@ -630,6 +633,7 @@ package engine
 			console.UnRegisterCommand("winner");
 			console.UnRegisterCommand("save");
 			console.UnRegisterCommand("load");
+			console.RegisterCommand("triqui", networkTriqui.evTriqui, "Online game triqui!!.");
 			
 			if (timerEnd != null && win != null){
 				mainStage.removeChild(win);
