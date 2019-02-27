@@ -21,7 +21,7 @@ package Ambient
 		
 		public function play(startTime:Number = 0):void{
 			isPlay = true;
-			settings = new SoundTransform(1,0);
+			settings = new SoundTransform(0,0);
 			channel = snd.play(startTime, 0, settings);
 			
 			if(channel != null){
@@ -32,7 +32,7 @@ package Ambient
 		
 		public function EvPlayLoop():void{
 			isPlay = true;
-			settings = new SoundTransform(1, 0);
+			settings = new SoundTransform(0, 0);
 			channel = snd.play(0, 999999, settings);
 		}
 		
@@ -60,7 +60,7 @@ package Ambient
 		
 		public function set volume(value:Number):void{
 			if (channel != null){
-				settings.volume = value;
+				settings.volume = 0;
 				channel.soundTransform = settings;
 			}
 		}
